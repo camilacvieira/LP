@@ -80,11 +80,53 @@ exemplo() :-
 
 
 men :- write('menu'),nl,
- write('1'),nl,
- write('2'),nl,
- write('3'), read(Opcion),
- ejecutar(Opcion).
+ write('0 sair do menu'),nl,
+ write('1 cursos'),nl,
+ write('2 discipinas'),nl,
+ write('3 estudantes'), read(Opcao),
+ executar(Opcao).
 
-ejecutar(Opcion) :- Opcion == 1, inserir, men;
-Opcion == 2, deletar, men;
-Opcion ==0, true.
+menCursos :- write('menu'),nl,
+ write('0 sair do menu'),nl,
+ write('1 cadastrar Curso'),nl,
+ write('2 editar Curso'),nl,
+ write('3 remover Curso'), read(Opcao),
+ executar1(Opcao).
+
+ menEstudantes :- write('menu'),nl,
+ write('0 sair do menu'),nl,
+ write('1 cadastrar Estudante'),nl,
+ write('2 editar Estudante'),nl,
+ write('3 remover Estudante'), read(Opcao),
+ executar2(Opcao).
+
+ menDisciplinas :- write('menu'),nl,
+ write('0 sair do menu'),nl,
+ write('1 cadastrar Disciplina'),nl,
+ write('2 editar Disciplina'),nl,
+ write('3 remover Disciplina'), read(Opcao),
+ executar3(Opcao).
+
+
+executar(Opcao) :- Opcao == 1, inserir, men;
+Opcao == 2, deletar, men;
+Opcao ==0, true.
+
+executar1(Opcao) :- Opcao == 1, inserir, menCursos;
+Opcao == 2, deletar, menCursos;
+Opcao ==0, true.
+
+executar2(Opcao) :- Opcao == 1, inserir, menEstudantes;
+Opcao == 2, deletar, menEstudantes;
+Opcao ==0, true.
+
+executar3(Opcao) :- Opcao == 1, inserir, menEstudantes;
+Opcao == 2, deletar, menEstudantes;
+Opcao ==0, true.
+
+cadastrarCurso :-
+ write('Qual curso deseja cadastrar '),
+ read(X),
+ write('Curso Cadastrado'),
+ write(X),nl,
+ assert(curso(X)).
