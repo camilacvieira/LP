@@ -1,5 +1,5 @@
 % Nome: Daniel Castro Neto Galhardo - Matricula : 201735022
-% Nome: Camila Corrêa Vieira - Matricula: 201735006
+% Nome: Camila CorrÃªa Vieira - Matricula: 201735006
 
 % inicia :-  write('Testeasdasd').
 % ?-inicia.
@@ -8,11 +8,12 @@
 
 % Base de Dados.
 % Dicionario.
-curso(cienciaComp):-   write('Ciencia da Computacao é um curso ativo da UFJF - Presencial e Romoto').
-curso(sistemasInfo):-  write('Sistemas de Informação é um curso ativo da UFJF - Presencial e Romoto').
+curso(cienciaComp):-   write('Ciencia da Computacao Ã© um curso ativo da UFJF - Presencial e Romoto').
+curso(sistemasInfo):-  write('Sistemas de InformaÃ§Ã£o Ã© um curso ativo da UFJF - Presencial e Romoto').
 gradecienciacomp([algoritmos, calculo, logica]).
 gradesistemasinfo([algoritmos,calculo,logica]).
 :- dynamic (disciplina/1).
+:- dynamic (curso/1).
 :- dynamic(matriculado/2).
 
 
@@ -67,22 +68,22 @@ menu :- repeat,
 
 % aux matriculas
 inserir :-
- write('Digite o curso que voc� deseja inserir um estudante [cienciaComp] ou [sistemasInfo]. '),
+ write('Digite o curso que você deseja inserir um estudante [cienciaComp] ou [sistemasInfo]. '),
  read(X),
  write('Digite o primeiro nome do aluno que voce deseja inserir nesse curso:'), nl,
  read(Y),
  assert(matriculado(Y,X)).
 
 deletar :-
- write('Digite o nome de quem voc� deseja desmatricular do curso entre aspas simples seguida de ponto.'), nl,nl,
+ write('Digite o nome de quem você deseja desmatricular do curso entre aspas simples seguida de ponto.'), nl,nl,
  read(X),nl,
- write('Digite o nome do curso que voc� deseja desmatricular o aluno [cienciaComp] ou [sistemasInfo].'), nl, nl,
+ write('Digite o nome do curso que você deseja desmatricular o aluno [cienciaComp] ou [sistemasInfo].'), nl, nl,
  read(Y), nl,
  retract(matriculado(X,Y)).
 
-editar :- write('Digite o nome de quem voc� deseja editar a matricula'), nl,
+editar :- write('Digite o nome de quem você deseja editar a matricula'), nl,
     read(X),
-    write('Digite o nome do curso que voc� quer editar da pessoa [cienciaComp] ou [sistemasInfo].'), nl, nl,
+    write('Digite o nome do curso que você quer editar da pessoa [cienciaComp] ou [sistemasInfo].'), nl, nl,
     read(Y), nl,
     retract(matriculado(X,Y)),
     write('Digite o nome do novo curso da pessoa [cienciaComp] ou [sistemasInfo]'),nl,
@@ -127,20 +128,25 @@ menCursos :- write('menu'),nl,
  executar3(Opcao).
 
 
-executar(Opcao) :- Opcao == 1, inserir, men;
-Opcao == 2, deletar, men;
+executar(Opcao) :- Opcao == 1, menCursos, men;
+Opcao == 2, menDisciplinas, men;
+Opcao == 3, menEstudantes, men;
 Opcao ==0, true.
 
-executar1(Opcao) :- Opcao == 1, inserir, menCursos;
-Opcao == 2, deletar, menCursos;
+executar1(Opcao) :- Opcao == 1, cadastrarCurso, menCursos;
+Opcao == 2, editarCurso, menCursos;
+Opcao == 3, excluirCurso, menCursos;
 Opcao ==0, true.
 
-executar2(Opcao) :- Opcao == 1, inserir, menEstudantes;
-Opcao == 2, deletar, menEstudantes;
+executar2(Opcao) :- Opcao == 1, cadastrarEstudante, menEstudantes;
+Opcao == 2, editarEstudante, menEstudantes;
+Opcao == 3, excluirEstudante, menEstudantes;
 Opcao ==0, true.
 
-executar3(Opcao) :- Opcao == 1, inserir, menEstudantes;
-Opcao == 2, deletar, menEstudantes;
+executar3(Opcao) :- Opcao == 1, cadastrarDisciplina, menDisciplinas;
+Opcao == 2, editarDisciplina, menDisciplinas;
+Opcao == 2, excluirDisciplina, menDisciplinas;
+
 Opcao ==0, true.
 
 cadastrarCurso :-
@@ -149,3 +155,60 @@ cadastrarCurso :-
  write('Curso Cadastrado'), nl,
  write(X),nl,
  assert(curso(X)).
+
+editarCurso :-
+     write('Qual curso deseja editar '), nl,
+ read(X),
+ retract(X),
+ write('Digite a alteração no nome do curso'), nl,
+ write(X),nl,
+ assert(curso(X)).
+
+excluirCurso :-
+     write('Qual curso deseja excluir '), nl,
+ read(X),
+ retract(curso(X)),
+ write('Curso excluido'), nl.
+
+cadastrarEstudante :-
+ write('Qual aluno deseja cadastrar '), nl,
+ read(X),
+ write('aluno Cadastrado'), nl,
+ write(X),nl,
+ assert(estudante(X)).
+
+editarEstudante :-
+     write('Qual aluno deseja editar '), nl,
+ read(X),
+ retractestudante((X)),
+ write('Digite a alteração no nome do aluno'), nl,
+ write(X),nl,
+ assert(estudante(X)).
+
+excluirEstudante :-
+     write('Qual aluno deseja excluir '), nl,
+ read(X),
+ retract(estudante(X)),
+ write('Aluno excluido'), nl.
+
+cadastrarDisciplina:-
+ write('Qual disciplina deseja cadastrar '), nl,
+ read(X),
+ write('disciplina Cadastrada'), nl,
+ write(X),nl,
+ assert(disciplina(X)).
+
+editarDisciplina :-
+     write('Qual disciplina deseja editar '), nl,
+ read(X),
+ retract(disciplina(X)),
+ write('Digite a alteração no nome da disciplina'), nl,
+ write(Y),nl,
+ assert(disciplina(Y)).
+
+excluirDisciplina :-
+     write('Qual disciplina deseja excluir '), nl,
+ read(X),
+ retract(disciplina(X)),
+ write('Disciplina excluida'), nl.
+
