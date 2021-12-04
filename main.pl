@@ -8,10 +8,6 @@
 
 % Base de Dados.
 % Dicionario.
-curso(cienciaComp):-   write('Ciencia da Computacao Ã© um curso ativo da UFJF - Presencial e Romoto').
-curso(sistemasInfo):-  write('Sistemas de InformaÃ§Ã£o Ã© um curso ativo da UFJF - Presencial e Romoto').
-gradecienciacomp([algoritmos, calculo, logica]).
-gradesistemasinfo([algoritmos,calculo,logica]).
 :- dynamic (disciplina/1).
 :- dynamic (curso/1).
 :- dynamic(matriculado/2).
@@ -20,18 +16,23 @@ gradecienciaComp(cienciaComp, primeiroPeriodo) :- write('No primeiro periodo a g
 gradecienciaComp(cienciaComp, segundoPeriodo) :- write('No segundo periodo a grade consiste das materias'), nl, write('Estrutura de Dados'), nl, write('Calculo II'), nl, write('Fisica I').
 gradesistemasInfo(sistemasInfo, primeiroPeriodo) :- write('No primeiro periodo a grade consiste das materias'), nl, write('Algoritmos'), nl, write('Administracao'), nl, write('Logica').
 gradesistemasInfo(sistemasInfo, segundoPeriodo) :- write('No segundo periodo a grade consiste das materias'), nl, write('Estrutura de Dados'), nl, write('Calculo II'), nl, write('Laboratorio Web').
+gradesistemasinfo([algoritmos,calculo,logica]).
+
+curso(cienciaComp):-   write('Ciencia da Computacao Ã© um curso ativo da UFJF - Presencial e Romoto').
+curso(sistemasInfo):-  write('Sistemas de InformaÃ§Ã£o Ã© um curso ativo da UFJF - Presencial e Romoto').
+
 
 
 % Matricula.
-matriculado(X,cienciaComp, um):- aluno(X, primeiroPeriodo),matriculado(X, algoritmos, um),
+matriculado(X,cienciaComp, um):- aluno(X, um),matriculado(X, algoritmos, um),
 matriculado(X, calculo, um),matriculado(X,logica, um).
 matriculado(X,sistemasInfo, um):- matriculado(X, algoritmos, um),
 matriculado(X, administracao, um), matriculado(X, logica, um).
-matriculado(X,cienciaComp, dois):-  matriculado(X, estrutura_de_dados, dois),
+matriculado(X,cienciaComp, dois):- aluno(X, dois), matriculado(X, estrutura_de_dados, dois),
 matriculado(X, calculo_dois, dois),matriculado(X,algebra_linear, dois).
 matriculado(X,sistemasInfo, dois):- matriculado(X, estrutura_de_dados, dois),
 matriculado(X, laboratorio_web, dois), matriculado(X, calculo_dois, dois).
-matriculado(X,Y,Z):- write(X),write(' esta matriculado no '),write('periodo:'),write(Z),write(' na materia: '),write(Y), nl.
+matriculado(X,Y,Z):- (aluno(X,Z) -> write(X),write(' esta matriculado no '),write('periodo:'),write(Z),write(' na materia: '),write(Y), nl).
 matriculado(daniel,cienciaComp,um).
 matriculado(camila,cienciaComp,um).
 matriculado(joao,cienciaComp,um).
@@ -54,7 +55,15 @@ matriculado(andreia,sistemasInfo,um).
 matriculado(guilherme,sistemasInfo,um).
 
 
-aluno(maria,segundoPeriodo).
+aluno(maria,dois).
+aluno(daniel,um).
+aluno(joao,um).
+aluno(marcos,um).
+aluno(lucas,dois).
+aluno(marcio,um).
+aluno(ana,dois).
+aluno(carol,um).
+
 
 
 
@@ -96,12 +105,25 @@ editar :- write('Digite o nome de quem você deseja editar a matricula'), nl,
 
 
 % operacoes
-consultarAprovacao(X):- aprovado(X,algoritmos), aprovado(X,logica), aprovado(X, calculo), write('O aluno foi aprovado').
+consultarAprovacao(X, Y):- ( Y == 1 ->  aprovado(X,algoritmos), aprovado(X,logica), aprovado(X, calculo)
+                           ; Y == 2 -> aprovado(X,estrutura_de_dados), aprovado(X, algebra_linear), aprovado(X, calculo_dois)
+                           ).
 nota(daniel, 69, algoritmos).
 nota(daniel, 60, logica).
-nota(daniel, 60, calculo).
-aprovado(X, Y):- nota(X, Z , Y), Z > 59.
+nota(daniel, 50, calculo).
+nota(maria, 89, estrutura_de_dados).
+nota(maria, 75, algebra_linear).
+nota(maria, 89, calculo_dois).
 
+aprovado(X, Y):- nota(X, Z , Y),
+ ( Z > 59 -> write(X), write(' foi aprovado em '), write(Y), write(' com a nota:'), write(Z) ; write(X), write(' foi reprovado em '), write(Y), write(' com a nota:'), write(Z) ), nl.
+
+
+ira(X,T):- ( T == 1 -> nota(X,Y,algoritmos), nota(X,Z,logica), nota(X,W,calculo), A is (Y+Z+W)/3 ,write(A)
+
+           ; T == 2 -> nota(X,Y,estrutura_de_dados), nota(X,Z,algebra_linear), nota(X,W,calculo_dois), A is (Y+Z+W)/3 ,write(A)
+
+           ).
 
 %menus
 
