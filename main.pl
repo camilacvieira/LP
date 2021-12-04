@@ -16,7 +16,6 @@ gradesistemasinfo([algoritmos,calculo,logica]).
 :- dynamic (curso/1).
 :- dynamic(matriculado/2).
 
-
 gradecienciaComp(cienciaComp, primeiroPeriodo) :- write('No primeiro periodo a grade consiste das materias'), nl, write('Algoritmos'), nl, write('Calculo'), nl, write('Logica').
 gradecienciaComp(cienciaComp, segundoPeriodo) :- write('No segundo periodo a grade consiste das materias'), nl, write('Estrutura de Dados'), nl, write('Calculo II'), nl, write('Fisica I').
 gradesistemasInfo(sistemasInfo, primeiroPeriodo) :- write('No primeiro periodo a grade consiste das materias'), nl, write('Algoritmos'), nl, write('Administracao'), nl, write('Logica').
@@ -24,33 +23,38 @@ gradesistemasInfo(sistemasInfo, segundoPeriodo) :- write('No segundo periodo a g
 
 
 % Matricula.
-matriculado(X,cienciaComp):- matriculado(X, algoritmos),
-matriculado(X, calculo),matriculado(X,logica).
-matriculado(X,sistemasInfo):- matriculado(X, algoritmos),
-matriculado(X, administracao), matriculado(X, logica).
-matriculado(daniel, algoritmos):- disciplina(algoritmos),
- write('daniel esta matr em alg').
-matriculado(daniel,cienciaComp).
-matriculado(camila,cienciaComp).
-matriculado(joao,cienciaComp).
-matriculado(marcos,cienciaComp).
-matriculado(lucas,cienciaComp).
-matriculado(alvaro,cienciaComp).
-matriculado(jessica,cienciaComp).
-matriculado(maria,cienciaComp).
-matriculado(marcio,cienciaComp).
-matriculado(josefa,cienciaComp).
+matriculado(X,cienciaComp, um):- aluno(X, primeiroPeriodo),matriculado(X, algoritmos, um),
+matriculado(X, calculo, um),matriculado(X,logica, um).
+matriculado(X,sistemasInfo, um):- matriculado(X, algoritmos, um),
+matriculado(X, administracao, um), matriculado(X, logica, um).
+matriculado(X,cienciaComp, dois):-  matriculado(X, estrutura_de_dados, dois),
+matriculado(X, calculo_dois, dois),matriculado(X,algebra_linear, dois).
+matriculado(X,sistemasInfo, dois):- matriculado(X, estrutura_de_dados, dois),
+matriculado(X, laboratorio_web, dois), matriculado(X, calculo_dois, dois).
+matriculado(X,Y,Z):- write(X),write(' esta matriculado no '),write('periodo:'),write(Z),write(' na materia: '),write(Y), nl.
+matriculado(daniel,cienciaComp,um).
+matriculado(camila,cienciaComp,um).
+matriculado(joao,cienciaComp,um).
+matriculado(marcos,cienciaComp,um).
+matriculado(lucas,cienciaComp,um).
+matriculado(alvaro,cienciaComp,um).
+matriculado(jessica,cienciaComp,um).
+matriculado(maria,cienciaComp,dois).
+matriculado(marcio,cienciaComp,um).
+matriculado(josefa,cienciaComp,um).
+matriculado(caio,sistemasInfo,um).
+matriculado(ana, sistemasInfo,um).
+matriculado(jose,sistemasInfo,um).
+matriculado(jorge,sistemasInfo,um).
+matriculado(marina,sistemasInfo,um).
+matriculado(leandro,sistemasInfo,um).
+matriculado(luan,sistemasInfo,um).
+matriculado(jaqueline,sistemasInfo,um).
+matriculado(andreia,sistemasInfo,um).
+matriculado(guilherme,sistemasInfo,um).
 
-matriculado(caio,sistemasInfo).
-matriculado(ana, sistemasInfo).
-matriculado(jose,sistemasInfo).
-matriculado(jorge,sistemasInfo).
-matriculado(marina,sistemasInfo).
-matriculado(leandro,sistemasInfo).
-matriculado(luan,sistemasInfo).
-matriculado(jaqueline,sistemasInfo).
-matriculado(andreia,sistemasInfo).
-matriculado(guilherme,sistemasInfo).
+
+aluno(maria,segundoPeriodo).
 
 
 
@@ -92,9 +96,11 @@ editar :- write('Digite o nome de quem você deseja editar a matricula'), nl,
 
 
 % operacoes
-
+consultarAprovacao(X):- aprovado(X,algoritmos), aprovado(X,logica), aprovado(X, calculo), write('O aluno foi aprovado').
 nota(daniel, 69, algoritmos).
-aprovado(X, Y):- nota(X, Z , Y), Z > 60.
+nota(daniel, 60, logica).
+nota(daniel, 60, calculo).
+aprovado(X, Y):- nota(X, Z , Y), Z > 59.
 
 
 %menus
