@@ -6,11 +6,15 @@
 
 % Base de Dados.
 % Dicionario.
-:- dynamic (disciplina/1).
+:- dynamic (disciplina/3).
 :- dynamic (curso/1).
 :- dynamic(matriculado/2).
 :- dynamic(materiaPeriodo/3).
 :- dynamic(nota/3).
+:- dynamic (aluno/3).
+:- dynamic (ira/3).
+
+
 %cursos ofertados
 
 curso(cienciaComp):-   write('Ciencia da Computacao eh um curso ativo da UFJF - Presencial e Romoto').
@@ -45,8 +49,8 @@ aluno(guilherme,sistemasInfo,um).
 nota(daniel, 69, algoritmos).
 nota(daniel, 60, logica).
 nota(daniel, 50, calculo).
-nota(camila, 69, algoritmos).
 nota(camila, 60, logica).
+nota(camila, 69, algoritmos).
 nota(camila, 50, calculo).
 nota(marcos, 96, algoritmos).
 nota(marcos, 98, logica).
@@ -57,9 +61,7 @@ nota(lucas, 10, calculo).
 nota(josefa, 89, algoritmos).
 nota(josefa, 60, logica).
 nota(josefa, 85, calculo).
-nota(alvaro, 67, algoritmos).
-nota(alvaro, 85, logica).
-nota(alvaro, 95, calculo).
+nota(alvaro, 50, algoritmos).
 nota(alvaro, 99, estrutura_de_dados).
 nota(alvaro, 90, algebra_linear).
 nota(alvaro, 80, calculo_dois).
@@ -101,10 +103,13 @@ disciplina(calculo_tres, tres, cienciaComp).
 disciplina(aspectos_teoricos, tres, sistemasInfo).
 
 % historico escolar de um estudante.
-historicoEscolar(X):- write('Materias cursadas pelo aluno: '), write(X), nl, nota(X,Z, Y), nl, write(Y), write(' Nota:'), write(Z),  nl, fail.
+historicoEscolar:-
+ write('digite o nome do aluno'), nl,
+    read(X),
+ write('Materias cursadas pelo aluno: '), write(X), nota(X,_, Y), nl, write(Y), nl, fail.
 
 % matriz curricular de um curso Z
-exibeGrade(Z):- disciplina(X,Y,Z), write('Mat�ria:'), write(X), write(' Periodo: '), write(Y), write(' Curso:'), write(Z), nl, fail.
+exibeGrade(Z):- disciplina(X,Y,Z), write('Matéria:'), write(X), write(' Periodo: '), write(Y), write(' Curso:'), write(Z), nl, fail.
 
 % 1)relacao de estudantes que ja cursaram uma dada disciplina
 % 1.1 - sem criterio de nota
@@ -125,72 +130,41 @@ write(Y),nl, write('Curso:'), write(Z), nl, write(' IRA:'), write(W),nl, fail.
 % relacao de cursos que contem uma dada disciplina
 disciplinasCurso(Disciplina) :-  write('Cursos que contem a disciplina:'), write(Disciplina), disciplina(Disciplina,_,Y), nl, write(' '), write(Y), write(' '), fail.
 
-ira(X,T,A):-( T == 1 -> nota(X,Y,algoritmos), nota(X,Z,logica), nota(X,W,calculo), A is (Y+Z+W)/3
-           ; T == 2 -> nota(X,B,algoritmos), nota(X,C,logica), nota(X,D,calculo), nota(X,E,estrutura_de_dados), nota(X,F,algebra_linear), nota(X,G,calculo_dois), A is (B+C+D+E+F+G)/6
+ira(X,T,A):-( T == 1 ->  nota(X,Z,logica), nota(X,W,calculo), A is (Z+W)/3
+           ; T == 2 -> nota(X,Y,estrutura_de_dados), nota(X,Z,algebra_linear), nota(X,W,calculo_dois), A is (Y+Z+W)/3
            ).
 
+iraDois(X, A):- A is 69, nota(X,Y,_), Y  is Y+A.
 
-
-
-%menu
-menu :- repeat,
-  write('Escolha uma opcao:'),nl,
-  write('1. Historico escolar de um estudante'),nl,
-  write('2. Matriz curricular de um curso'),nl,
-  read(Choice),
-  write(Choice),
-
-  break.
-
-% aux matriculas
-inserir :-
- write('Digite o curso que voce deseja inserir um estudante [cienciaComp] ou [sistemasInfo]. '),
- read(X),
- write('Digite o primeiro nome do aluno que voce deseja inserir nesse curso:'), nl,
- read(Y),
- assert(matriculado(Y,X)).
-
-deletar :-
- write('Digite o nome de quem voce deseja desmatricular do curso entre aspas simples seguida de ponto.'), nl,nl,
- read(X),nl,
- write('Digite o nome do curso que voce deseja desmatricular o aluno [cienciaComp] ou [sistemasInfo].'), nl, nl,
- read(Y), nl,
- retract(matriculado(X,Y)).
-
-editar :- write('Digite o nome de quem voce deseja editar a matricula'), nl,
-    read(X),
-    write('Digite o nome do curso que voce quer editar da pessoa [cienciaComp] ou [sistemasInfo].'), nl, nl,
-    read(Y), nl,
-    retract(matriculado(X,Y)),
-    write('Digite o nome do novo curso da pessoa [cienciaComp] ou [sistemasInfo]'),nl,
-    read(Z),
-    assert(matriculado(X,Z)).
-
-%menus
 
 men :- write('menu'),nl,
- write('0 sair do menu'),nl,
+ write('0 sair do Menu'),nl,
  write('1 cursos'),nl,
  write('2 discipinas'),nl,
  write('3 estudantes'), read(Opcao),
  executar(Opcao).
 
 menCursos :- write('menu'),nl,
- write('0 sair do menu'),nl,
+ write('0 Voltar'),nl,
  write('1 cadastrar Curso'),nl,
  write('2 editar Curso'),nl,
  write('3 remover Curso'), read(Opcao),
  executar1(Opcao).
 
  menEstudantes :- write('menu'),nl,
- write('0 sair do menu'),nl,
- write('1 cadastrar Estudante'),nl,
- write('2 editar Estudante'),nl,
- write('3 remover Estudante'), read(Opcao),
+ write('0 Voltar'),nl,
+ write('1 cadastrar Aluno'),nl,
+ write('2 editar Aluno'),nl,
+ write('3 remover Aluno'), nl,
+ write('4 consultar materias cursadas Aluno'),nl,
+ write('5 cadastrar nota do Aluno'), nl,
+ write('6 consultar IRA do Aluno'), nl,
+
+ read(Opcao),
  executar2(Opcao).
 
  menDisciplinas :- write('menu'),nl,
- write('0 sair do menu'),nl,
+ write('0 Voltar'),nl,
  write('1 cadastrar Disciplina'),nl,
  write('2 editar Disciplina'),nl,
  write('3 remover Disciplina'), read(Opcao),
@@ -210,28 +184,30 @@ Opcao ==0, true.
 executar2(Opcao) :- Opcao == 1, cadastrarEstudante, menEstudantes;
 Opcao == 2, editarEstudante, menEstudantes;
 Opcao == 3, excluirEstudante, menEstudantes;
+Opcao == 4, historicoEscolar, menEstudantes;
+Opcao == 5, incluirNota, menEstudantes;
+Opcao == 5, incluirNota, menEstudantes;
+Opcao == 6, consultarIra, menEstudantes;
 Opcao ==0, true.
 
 executar3(Opcao) :- Opcao == 1, cadastrarDisciplina, menDisciplinas;
 Opcao == 2, editarDisciplina, menDisciplinas;
-Opcao == 2, excluirDisciplina, menDisciplinas;
-
+Opcao == 3, excluirDisciplina, menDisciplinas;
 Opcao ==0, true.
 
 cadastrarCurso :-
  write('Qual curso deseja cadastrar '), nl,
  read(X),
  write('Curso Cadastrado'), nl,
- write(X),nl,
  assert(curso(X)).
 
 editarCurso :-
      write('Qual curso deseja editar '), nl,
  read(X),
- retract(X),
- write('Digite a alteração no nome do curso'), nl,
- write(X),nl,
- assert(curso(X)).
+ retract(curso(X)),
+ write('Digite a alteracao no nome do curso'), nl,
+ read(Y),nl,
+ assert(curso(Y)).
 
 excluirCurso :-
      write('Qual curso deseja excluir '), nl,
@@ -242,42 +218,79 @@ excluirCurso :-
 cadastrarEstudante :-
  write('Qual aluno deseja cadastrar '), nl,
  read(X),
- write('aluno Cadastrado'), nl,
- write(X),nl,
- assert(estudante(X)).
+ write('Qual o curso do aluno?'), nl,
+ read(Y),
+ write('Qual o periodo do aluno?'), nl,
+ read(Z),
+ write('Aluno Cadastrado'), nl,
+ assert(aluno(X,Y,Z)).
 
 editarEstudante :-
-     write('Qual aluno deseja editar '), nl,
+ write('Qual aluno deseja editar '), nl,
  read(X),
- retractestudante((X)),
+ write('Qual o curso desse aluno?'), nl,
+ read(Y),
+ write('Qual o periodo desse aluno?'), nl,
+ read(Z),
+ retract(aluno(X,Y,Z)),
  write('Digite a alteracao no nome do aluno'), nl,
- write(X),nl,
- assert(estudante(X)).
+ read(W),nl,
+ assert(aluno(W,Y,Z)).
 
 excluirEstudante :-
-     write('Qual aluno deseja excluir '), nl,
+ write('Qual aluno deseja excluir '), nl,
  read(X),
- retract(estudante(X)),
+ write('Qual o curso desse aluno? '), nl,
+ read(Y),
+ retract(aluno(X,Y,_)),
+ retractall(nota(X,_,_)),
  write('Aluno excluido'), nl.
 
 cadastrarDisciplina:-
  write('Qual disciplina deseja cadastrar '), nl,
  read(X),
+ write('De qual periodo é essa disciplina?'), nl,
+ read(Y),
+ write('Qual o curso dessa disciplina'), nl,
+ read(Z),
  write('disciplina Cadastrada'), nl,
- write(X),nl,
- assert(disciplina(X)).
+ assert(disciplina(X,Y,Z)).
 
 editarDisciplina :-
-     write('Qual disciplina deseja editar '), nl,
+ write('Qual disciplina deseja editar '), nl,
  read(X),
- retract(disciplina(X)),
- write('Digite a alteração no nome da disciplina'), nl,
- write(Y),nl,
- assert(disciplina(Y)).
+ write('De qual periodo é essa disciplina?'), nl,
+ read(Y),
+ write('Qual o curso dessa disciplina'), nl,
+ read(Z),
+ retract(disciplina(X,Y,Z)),
+ write('Digite a alteracao no nome da disciplina'), nl,
+ write(W),nl,
+ assert(disciplina(W,Y,Z)).
 
 excluirDisciplina :-
-     write('Qual disciplina deseja excluir '), nl,
+ write('Qual disciplina deseja excluir '), nl,
  read(X),
- retract(disciplina(X)),
+ write('De qual periodo é essa disciplina?'), nl,
+ read(Y),
+ write('Qual o curso dessa disciplina'), nl,
+ read(Z),
+ retract(disciplina(X,Y,Z)),
+ retractall(nota(_,_,X)),
  write('Disciplina excluida'), nl.
 
+incluirNota:-
+  write('Para qual aluno deseja lançar nota? '), nl,
+ read(X),
+ write('Qual a materia que deseja lançar nota?'), nl,
+ read(Y),
+ write('Qual o valor da nota?'), nl,
+ read(Z),
+ assert( nota(X, Z, Y)).
+
+consultarIra:-
+  write('Qual aluno deseja consultar ira? '), nl,
+ read(X),
+ write('Qual o periodo desse aluno?'), nl,
+ read(Y),
+ assert(ira(X,Y,A)).
