@@ -10,7 +10,7 @@
 :- dynamic (curso/1).
 :- dynamic(matriculado/2).
 :- dynamic(materiaPeriodo/3).
-
+:- dynamic(nota/3).
 %cursos ofertados
 
 curso(cienciaComp):-   write('Ciencia da Computacao eh um curso ativo da UFJF - Presencial e Romoto').
@@ -57,7 +57,9 @@ nota(lucas, 10, calculo).
 nota(josefa, 89, algoritmos).
 nota(josefa, 60, logica).
 nota(josefa, 85, calculo).
-nota(alvaro, 50, algoritmos).
+nota(alvaro, 67, algoritmos).
+nota(alvaro, 85, logica).
+nota(alvaro, 95, calculo).
 nota(alvaro, 99, estrutura_de_dados).
 nota(alvaro, 90, algebra_linear).
 nota(alvaro, 80, calculo_dois).
@@ -99,7 +101,7 @@ disciplina(calculo_tres, tres, cienciaComp).
 disciplina(aspectos_teoricos, tres, sistemasInfo).
 
 % historico escolar de um estudante.
-historicoEscolar(X):- write('Materias cursadas pelo aluno: '), write(X), nota(X,_, Y), nl, write(Y), nl, fail.
+historicoEscolar(X):- write('Materias cursadas pelo aluno: '), write(X), nl, nota(X,Z, Y), nl, write(Y), write(' Nota:'), write(Z),  nl, fail.
 
 % matriz curricular de um curso Z
 exibeGrade(Z):- disciplina(X,Y,Z), write('Matéria:'), write(X), write(' Periodo: '), write(Y), write(' Curso:'), write(Z), nl, fail.
@@ -124,10 +126,10 @@ write(Y),nl, write('Curso:'), write(Z), nl, write(' IRA:'), write(W),nl, fail.
 disciplinasCurso(Disciplina) :-  write('Cursos que contem a disciplina:'), write(Disciplina), disciplina(Disciplina,_,Y), nl, write(' '), write(Y), write(' '), fail.
 
 ira(X,T,A):-( T == 1 -> nota(X,Y,algoritmos), nota(X,Z,logica), nota(X,W,calculo), A is (Y+Z+W)/3
-           ; T == 2 -> nota(X,Y,estrutura_de_dados), nota(X,Z,algebra_linear), nota(X,W,calculo_dois), A is (Y+Z+W)/3
+           ; T == 2 -> nota(X,B,algoritmos), nota(X,C,logica), nota(X,D,calculo), nota(X,E,estrutura_de_dados), nota(X,F,algebra_linear), nota(X,G,calculo_dois), A is (B+C+D+E+F+G)/6
            ).
 
-iraDois(X, A):- A is 69, nota(X,Y,_), Y  is Y+A.
+
 
 
 %menu
