@@ -4,8 +4,6 @@
 % inicia :-  write('Testeasdasd').
 % ?-inicia.
 
-
-
 % Base de Dados.
 % Dicionario.
 :- dynamic (disciplina/1).
@@ -13,62 +11,37 @@
 :- dynamic(matriculado/2).
 :- dynamic(materiaPeriodo/3).
 
+%cursos ofertados
 
-
-exibeGrade(Z):- materiaPeriodo(X,Y,Z), write('Matéria:'), write(X), write(' Periodo: '), write(Y), write(' Curso:'), write(Z), nl, write('Pressione ; para buscar o proximo').
 curso(cienciaComp):-   write('Ciencia da Computacao eh um curso ativo da UFJF - Presencial e Romoto').
 curso(sistemasInfo):-  write('Sistemas de Informacao eh um curso ativo da UFJF - Presencial e Romoto').
 
+%alunos
 
-
-
-
-% Materia.
-% materiaPeriodo(pede_nome_materia, X,Y) -> relação de cursos que contem
-% uma dada disciplina.
-materiaPeriodo(algoritmos, um, cienciaComp).
-materiaPeriodo(logica,um, cienciaComp).
-materiaPeriodo(administracao, um, sistemasInfo).
-materiaPeriodo(calculo, um, cienciaComp).
-materiaPeriodo(algoritmos, um, sistemasInfo).
-materiaPeriodo(logica,um, sistemasInfo).
-materiaPeriodo(calculo, um, sistemasInfo).
-
-
-
-% Matricula.
-matriculado(X,cienciaComp, um):- aluno(X, cienciaComp, um),matriculado(X, algoritmos, um),
-matriculado(X, calculo, um),matriculado(X,logica, um).
-matriculado(X,sistemasInfo, um):- matriculado(X, algoritmos, um),
-matriculado(X, administracao, um), matriculado(X, logica, um).
-matriculado(X,cienciaComp, dois):- aluno(X,cienciaComp, dois), matriculado(X, estrutura_de_dados, dois),
-matriculado(X, calculo_dois, dois),matriculado(X,algebra_linear, dois).
-matriculado(X,sistemasInfo, dois):- matriculado(X, estrutura_de_dados, dois),
-matriculado(X, laboratorio_web, dois), matriculado(X, calculo_dois, dois).
-matriculado(X,Y,Z):- (aluno(X,_,Z) -> write(X),write(' esta matriculado no '),write('periodo:'),write(Z),write(' na materia: '),write(Y), nl).
-matriculado(daniel,cienciaComp,um).
-matriculado(camila,cienciaComp,um).
-matriculado(joao,cienciaComp,um).
-matriculado(marcos,cienciaComp,um).
-matriculado(lucas,cienciaComp,um).
-matriculado(alvaro,cienciaComp,dois).
-matriculado(jessica,cienciaComp,dois).
-matriculado(marcio,cienciaComp,dois).
-matriculado(maria,cienciaComp,dois).
-matriculado(josefa,cienciaComp,um).
-matriculado(caio,sistemasInfo,um).
-matriculado(ana, sistemasInfo,um).
-matriculado(jose,sistemasInfo,um).
-matriculado(jorge,sistemasInfo,um).
-matriculado(marina,sistemasInfo,um).
-matriculado(leandro,sistemasInfo,um).
-matriculado(luan,sistemasInfo,um).
-matriculado(jaqueline,sistemasInfo,um).
-matriculado(andreia,sistemasInfo,um).
-matriculado(guilherme,sistemasInfo,um).
+aluno(daniel,cienciaComp,um).
+aluno(camila,cienciaComp,um).
+aluno(joao,cienciaComp,um).
+aluno(marcos,cienciaComp,um).
+aluno(lucas,cienciaComp,um).
+aluno(josefa,cienciaComp,um).
+aluno(alvaro,cienciaComp,dois).
+aluno(jessica,cienciaComp,dois).
+aluno(marcio,cienciaComp,dois).
+aluno(maria,cienciaComp,dois).
+aluno(caio,sistemasInfo,um).
+aluno(ana, sistemasInfo,um).
+aluno(jose,sistemasInfo,um).
+aluno(jorge,sistemasInfo,um).
+aluno(marina,sistemasInfo,um).
+aluno(leandro,sistemasInfo,um).
+aluno(luan,sistemasInfo,um).
+aluno(jaqueline,sistemasInfo,um).
+aluno(andreia,sistemasInfo,um).
+aluno(guilherme,sistemasInfo,um).
 
 
 %nota alunos
+
 nota(daniel, 69, algoritmos).
 nota(daniel, 60, logica).
 nota(daniel, 50, calculo).
@@ -104,7 +77,6 @@ nota(marcio, 59, algoritmos).
 nota(marcio, 70, logica).
 nota(marcio, 40, calculo).
 
-
 %disciplinas
 
 disciplina(logica, um, cienciaComp).
@@ -126,44 +98,39 @@ disciplina(estrutura_dados_dois, tres, sistemasInfo).
 disciplina(calculo_tres, tres, cienciaComp).
 disciplina(aspectos_teoricos, tres, sistemasInfo).
 
+% historico escolar de um estudante.
+historicoEscolar(X):- write('Materias cursadas pelo aluno: '), write(X), nota(X,_, Y), nl, write(Y), nl, fail.
 
+% matriz curricular de um curso Z
+exibeGrade(Z):- disciplina(X,Y,Z), write('Matéria:'), write(X), write(' Periodo: '), write(Y), write(' Curso:'), write(Z), nl, fail.
 
-% matriz_curricular de um curso
+% 1)relacao de estudantes que ja cursaram uma dada disciplina
+% 1.1 - sem criterio de nota
+exibeAlunosDisciplina(Disciplina):-  nota(X,_,Disciplina), write('Nome do Aluno:'), write(X), nl, fail.
+
+% 1.2 - com criterio de nota
+exibeAlunosDisciplinaNota(Disciplina,Nota):- nota(X,Y, Disciplina), Y > Nota, aluno(X,_,_), write('Nome do Aluno:'), write(X), nl, fail.
+
+% relacao de um estudante de um dado curso.
+% sem criterio de ira.
+exibeAlunos(Y):- aluno(X,Y,Z), write('Aluno:'), write(X),nl, write('Periodo:'),
+write(Z),nl, write('Curso:'), write(Y), nl, fail.
+
+% com criterio do ira
+exibeAlunosIra(Z, Periodo, Valor):- aluno(X,Z,Y), ira(X,Periodo,W), W > Valor, write(' Aluno:'), write(X),nl, write('Periodo:'),
+write(Y),nl, write('Curso:'), write(Z), nl, write(' IRA:'), write(W),nl, fail.
+
+% relacao de cursos que contem uma dada disciplina
 disciplinasCurso(Disciplina) :-  write('Cursos que contem a disciplina:'), write(Disciplina), disciplina(Disciplina,_,Y), nl, write(' '), write(Y), write(' '), fail.
-materiasCursadas(X):- write('Materias cursadas pelo aluno: '), write(X), nota(X,_, Y), nl, write(Y), nl, fail.
-aluno(daniel,cienciaComp,um).
-aluno(camila,cienciaComp,um).
-aluno(joao,cienciaComp,um).
-aluno(marcos,cienciaComp,um).
-aluno(lucas,cienciaComp,um).
-aluno(josefa,cienciaComp,um).
-aluno(alvaro,cienciaComp,dois).
-aluno(jessica,cienciaComp,dois).
-aluno(marcio,cienciaComp,dois).
-aluno(maria,cienciaComp,dois).
-aluno(caio,sistemasInfo,um).
-aluno(ana, sistemasInfo,um).
-aluno(jose,sistemasInfo,um).
-aluno(jorge,sistemasInfo,um).
-aluno(marina,sistemasInfo,um).
-aluno(leandro,sistemasInfo,um).
-aluno(luan,sistemasInfo,um).
-aluno(jaqueline,sistemasInfo,um).
-aluno(andreia,sistemasInfo,um).
-aluno(guilherme,sistemasInfo,um).
-% Requisito: relação de estudantes de um curso.
-exibeAlunos(Z):- aluno(X,Z,Y), write('Aluno:'), write(X),nl, write('Periodo:'),
-write(Y),nl, write('Curso:'), write(Z).
 
-exibeAlunosDisciplina(Disciplina):-  nota(X,_,Disciplina), write('Nome do Aluno:'), write(X).
-exibeAlunosDisciplinaNota(Disciplina,Nota):- nota(X,Y, Disciplina), Y > Nota, aluno(X,_,_), write('Nome do Aluno:'), write(X).
-exibeAlunosIra(Z, Periodo, Valor):- aluno(X,Z,Y), iraDois(X,Periodo,W), W > Valor, write(' Aluno:'), write(X),nl, write('Periodo:'),
-write(Y),nl, write('Curso:'), write(Z), nl, write(' IRA:'), write(W).
+ira(X,T,A):-( T == 1 -> nota(X,Y,algoritmos), nota(X,Z,logica), nota(X,W,calculo), A is (Y+Z+W)/3
+           ; T == 2 -> nota(X,Y,estrutura_de_dados), nota(X,Z,algebra_linear), nota(X,W,calculo_dois), A is (Y+Z+W)/3
+           ).
+
+iraDois(X, A):- A is 69, nota(X,Y,_), Y  is Y+A.
 
 
 %menu
-
-
 menu :- repeat,
   write('Escolha uma opcao:'),nl,
   write('1. Historico escolar de um estudante'),nl,
@@ -196,30 +163,6 @@ editar :- write('Digite o nome de quem voce deseja editar a matricula'), nl,
     write('Digite o nome do novo curso da pessoa [cienciaComp] ou [sistemasInfo]'),nl,
     read(Z),
     assert(matriculado(X,Z)).
-
-
-% operacoes
-consultarAprovacao(X, Y):- ( Y == 1 ->  aprovado(X,algoritmos), aprovado(X,logica), aprovado(X, calculo)
-                           ; Y == 2 -> aprovado(X,estrutura_de_dados), aprovado(X, algebra_linear), aprovado(X, calculo_dois)
-                           ).
-
-aprovado(X, Y):- nota(X, Z , Y),
- ( Z > 59 -> write(X), write(' foi aprovado em '), write(Y), write(' com a nota:'), write(Z) ; write(X), write(' foi reprovado em '), write(Y), write(' com a nota:'), write(Z) ), nl.
-
-
-ira(X,T,A):- ( T == 1 -> nota(X,Y,algoritmos), nota(X,Z,logica), nota(X,W,calculo), A is (Y+Z+W)/3 ,write('O ira de '), write(X), write(' eh:'), write(A)
-
-           ; T == 2 -> nota(X,Y,estrutura_de_dados), nota(X,Z,algebra_linear), nota(X,W,calculo_dois), A is (Y+Z+W)/3 ,write(A)
-
-           ).
-
-
-
-iraDois(X,T,A):- ( T == 1 -> nota(X,Y,algoritmos), nota(X,Z,logica), nota(X,W,calculo), A is (Y+Z+W)/3
-           ; T == 2 -> nota(X,Y,estrutura_de_dados), nota(X,Z,algebra_linear), nota(X,W,calculo_dois), A is (Y+Z+W)/3
-           ).
-
-
 
 %menus
 
