@@ -148,7 +148,9 @@ menCursos :- write('menu'),nl,
  write('0 Voltar'),nl,
  write('1 cadastrar Curso'),nl,
  write('2 editar Curso'),nl,
- write('3 remover Curso'), read(Opcao),
+ write('3 remover Curso'),nl,
+ write('4 consultar curso'),nl,
+ read(Opcao),
  executar1(Opcao).
 
  menEstudantes :- write('menu'),nl,
@@ -159,7 +161,7 @@ menCursos :- write('menu'),nl,
  write('4 consultar materias cursadas Aluno'),nl,
  write('5 cadastrar nota do Aluno'), nl,
  write('6 consultar IRA do Aluno'), nl,
-
+ write('7 consultar aluno'),nl,
  read(Opcao),
  executar2(Opcao).
 
@@ -167,7 +169,10 @@ menCursos :- write('menu'),nl,
  write('0 Voltar'),nl,
  write('1 cadastrar Disciplina'),nl,
  write('2 editar Disciplina'),nl,
- write('3 remover Disciplina'), read(Opcao),
+ write('3 remover Disciplina'),nl,
+ write('4 consultar Disciplina'),nl,
+ read(Opcao),
+
  executar3(Opcao).
 
 
@@ -179,6 +184,7 @@ Opcao ==0, true.
 executar1(Opcao) :- Opcao == 1, cadastrarCurso, menCursos;
 Opcao == 2, editarCurso, menCursos;
 Opcao == 3, excluirCurso, menCursos;
+Opcao == 4, consultarCurso, menCursos;
 Opcao ==0, true.
 
 executar2(Opcao) :- Opcao == 1, cadastrarEstudante, menEstudantes;
@@ -188,11 +194,15 @@ Opcao == 4, historicoEscolar, menEstudantes;
 Opcao == 5, incluirNota, menEstudantes;
 Opcao == 5, incluirNota, menEstudantes;
 Opcao == 6, consultarIra, menEstudantes;
+Opcao == 7, consultarEstudante, menEstudantes;
+
 Opcao ==0, true.
 
 executar3(Opcao) :- Opcao == 1, cadastrarDisciplina, menDisciplinas;
 Opcao == 2, editarDisciplina, menDisciplinas;
 Opcao == 3, excluirDisciplina, menDisciplinas;
+Opcao == 4, consultarDisciplina, menDisciplinas;
+
 Opcao ==0, true.
 
 cadastrarCurso :-
@@ -294,3 +304,27 @@ consultarIra:-
  write('Qual o periodo desse aluno?'), nl,
  read(Y),
  assert(ira(X,Y,A)).
+
+consultarCurso:-
+  write('Qual curso deseja consultar? '), nl,
+ read(X),
+curso(X).
+
+consultarEstudante:-
+write('Qual aluno deseja consultar '), nl,
+ read(X),
+ write('Qual o curso desse aluno?'), nl,
+ read(Y),
+ write('Qual o periodo desse aluno?'), nl,
+ read(Z),
+ aluno(X,Y,Z).
+
+consultarDisciplina:-
+ write('Qual disciplina deseja consultar? '), nl,
+ read(X),
+ write('De qual periodo é essa disciplina?'), nl,
+ read(Y),
+ write('Qual o curso dessa disciplina'), nl,
+ read(Z),
+ disciplina(X,Y,Z).
+
